@@ -1,0 +1,20 @@
+background        no
+out_to_console 	  yes
+out_to_x	  no
+update_interval	  5
+total_run_times	  0
+short_units	  yes
+pad_percents	  3
+
+override_utf8_locale yes
+
+TEXT
+,[{"full_text": " ❤ $acpitemp°C [$cpu%] ","color": "\#CC5555"},
+  {"full_text": " ≣ [$membar] ", "color":"\#B589E0"},
+  ${if_up wlp3s0}{"full_text": " ≈ ${wireless_essid wlp3s0} [${wireless_link_qual_perc wlp3s0}%] ","color":"\#4455FF"},
+  $else${if_up ppp0}{"full_text": " ≈ orange ","color":"\#4455EE"},$else
+  {"full_text": " ≈ no connection ","color":"\#33CC99"},$endif$endif
+  {"full_text": " ☇ [${battery_percent BAT1}%] ","color":"\#9933CC"},
+  {"full_text": " ${time %a %d %b} ${time %H:%M} ","color":"\#0ADD0A"}
+]
+
