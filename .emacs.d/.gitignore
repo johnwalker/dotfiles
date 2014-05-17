@@ -1,0 +1,11 @@
+auto-save-list/
+elpa/
+eshell/
+ac-comphist.dat
+abbrev_defs
+bookmarks
+flycheck*
+org*
+projectile*
+Cask
+.cask/
