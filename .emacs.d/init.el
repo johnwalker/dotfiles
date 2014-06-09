@@ -1,15 +1,13 @@
-;;; package --- Summary
+;;;  --- Summary
 ;;; Code:
-;;; Commentary:
+;;; Commentary: 
+(package-initialize) 
 
-(require 'package)
-
-(package-initialize)
-
-(setq package-archives '(("elpa" . "http://tromey.com/elpa/")
+(setq package-archives '(;; ("elpa" . "http://tromey.com/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
-
+			 ("melpa" . "http://melpa.milkbox.net/packages/")
+			 ("org" . "http://orgmode.org/elpa/")))
+(setq next-line-add-newlines t)
 (setq package-list '(ac-nrepl
 		     ag
 		     ample-theme
@@ -39,7 +37,6 @@
 		     geiser
 		     gist
 		     gh
-		     git-gutter
 		     god-mode
 		     goto-chg
 		     graphviz-dot-mode
@@ -51,7 +48,6 @@
 		     helm-swoop
 		     helm
 		     highlight-parentheses
-		     hiwin
 		     hl-line+
 		     htmlize
 		     inkpot-theme
@@ -128,16 +124,16 @@
 		     workgroups
 		     yaxception))
 
-; fetch the list of packages available 
+					; fetch the list of packages available 
 (unless package-archive-contents
   (package-refresh-contents))
 
-; install the missing packages
+					; install the missing packages
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
 
-; activate all the packages (in particular autoloads)
+					; activate all the packages (in particular autoloads)
 
 (setq backup-directory-alist `(("." . "~/.saves")))
 
@@ -154,7 +150,7 @@
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (setq cider-popup-stacktraces t)
 (setq cider-auto-select-error-buffer t)
-(setq nrepl-hide-special-buffers t)
+(setq nrepl-hide-special-buffers nil)
 (setq cider-repl-result-prefix "eval> ")
 
 (use-package smartparens
@@ -208,6 +204,7 @@
   (setq confirm-nonexistent-file-or-buffer nil))
 
 (setup-ui)
+(require 'orgconfig)
 
 (use-package discover
   :ensure discover
@@ -243,11 +240,11 @@
 			    (menu-bar-lines . 0)
 			    (tool-bar-lines . 0)))
 
-(setq font-lock-maximum-decoration t)
+					; (setq font-lock-maximum-decoration t)
 (setq compilation-scroll-output t)
-(setq compile-auto-highlight t)
-(setq auto-mode-alist (cons '(".*Makefile.*" . makefile-mode) auto-mode-alist))
-(setq auto-mode-alist (cons '("\\.mak" . makefile-mode) auto-mode-alist))
+					; (setq compile-auto-highlight t)
+					; (setq auto-mode-alist (cons '(".*Makefile.*" . makefile-mode) auto-mode-alist))
+					; (setq auto-mode-alist (cons '("\\.mak" . makefile-mode) auto-mode-alist))
 
 (defun indent-buffer ()
   (interactive)
@@ -261,8 +258,8 @@
  ("C-]" . ibuffer)
  ("C-x k" . kill-this-buffer))
 
-(require 'orgconfig)
-(require 'instructions)
+
+;; (require 'instructions)
 
 (use-package paste-kde
   :commands paste-kde-region
@@ -270,7 +267,7 @@
 
 (setq TeX-engine 'pdflatex)
 
-(setq uniquify-buffer-name-style 'reverse)
+;; (setq uniquify-buffer-name-style 'reverse)
 (global-rainbow-delimiters-mode)
 (setq recentf-max-menu-items 150)
 (add-hook 'cider-repl-mode-hook 'subword-mode)
@@ -303,14 +300,21 @@
 (setq guide-key/idle-delay 0)
 (whole-line-or-region-mode +1)
 
+(global-set-key (kbd "M-<f1>") '(lambda () (interactive)
+				  (save-excursion (if (and (boundp 'recentf-mode) recentf-mode)
+						      (progn (recentf-mode 0)
+							     (org-publish "blog")
+							     (recentf-mode +1))
+						    (org-publish "blog")))))
+(global-set-key (kbd "C-<f1>") '(lambda () (interactive)
+				  (save-excursion (if (and (boundp 'recentf-mode) recentf-mode)
+						      (progn (recentf-mode 0)
+							     (org-publish-current-file)
+							     (recentf-mode +1))
+						    (org-publish-current-file)))))
+
 (bind-keys :map org-mode-map
-	   ("<f10>" . org-plot/gnuplot)
-	   ("C-c p" . (lambda () (interactive)
-			(save-excursion (if (and (boundp 'recentf-mode) recentf-mode)
-					    (progn (recentf-mode 0)
-						   (org-publish "blog")
-						   (recentf-mode +1))
-					  (org-publish "blog"))))))
+	   ("<f10>" . org-plot/gnuplot))
 
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc)
@@ -327,9 +331,10 @@
 (setq slime-lisp-implementations '(("sbcl" ("sbcl" "--dynamic-space-size" "2048"))))
 
 (global-set-key (kbd "C-x C-r") 'helm-recentf)
-(recentf-mode 1)
+(recentf-mode 1) 
 
 (global-set-key (kbd "<f1>") 'eshell)
+(global-set-key (kbd "<f5>") 'moz-controller-page-refresh)
 (global-set-key (kbd "C-z") 'repeat)
 
 (global-set-key (kbd "C-x g") 'rgrep)
@@ -341,25 +346,47 @@
 (setq default-directory "~/development/")
 (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
-(global-git-gutter-mode +1)
-(setq git-gutter:lighter " GG")
-(global-set-key (kbd "C-x v r") 'git-gutter:revert-hunk)
-(global-set-key (kbd "C-x v p") 'git-gutter:previous-hunk)
-(global-set-key (kbd "C-x v n") 'git-gutter:next-hunk)
-(global-set-key (kbd "C-x v s") 'git-gutter:stage-hunk)
-
-(global-auto-revert-mode t)
-
 (require 'flx-ido)
 (ido-mode 1)
 (ido-everywhere 1)
 (flx-ido-mode 1)
 (setq ido-use-faces nil)
 
-(setq gc-cons-threshold 20000000)
+;; (setq gc-cons-threshold 20000000)
 
+;; (load-theme 'moe-light t)
 (load-theme 'leuven t)
 (require 'ac-nrepl)
+
+(projectile-global-mode)
+
+(define-clojure-indent
+  (defroutes 'defun)
+  (GET 2)
+  (POST 2)
+  (PUT 2)
+  (DELETE 2)
+  (HEAD 2)
+  (ANY 2)
+  (context 2))
+
+(require 's)
+
+
+
+(require 'clj-refactor)
+(add-hook 'clojure-mode-hook (lambda ()
+                               (clj-refactor-mode 1)
+                               ;; insert keybinding setup here
+ 			       (cljr-add-keybindings-with-prefix "C-c C-a")
+                               ))
+
+(add-hook 'clojure-mode-hook 'yas/minor-mode-on)
+
+(require 'yasnippet)
+(when (require 'yasnippet nil 'noerror)
+  (progn
+    (yas/load-directory "~/.emacs.d/snippets")))
 
 (provide 'init)
 
@@ -368,7 +395,28 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("fa4e4895e851ffbb9ac68c2f26a863ba054a96e4f3be4cb1f03db9a0cf46fb69" default))))
+ '(ansi-color-names-vector ["#5f5f5f" "#ff4b4b" "#a1db00" "#fce94f" "#5fafd7" "#d18aff" "#afd7ff" "#ffffff"])
+ '(compilation-message-face (quote default))
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#657b83")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
+ '(custom-safe-themes (quote ("bf648fd77561aae6722f3d53965a9eb29b08658ed045207fe32ffed90433eb52" "ce79400f46bd76bebeba655465f9eadf60c477bd671cbcd091fe871d58002a88" "d5336b707d375fbc2c00a53a60cafa264fc7e600fd747cce2dde976609b37573" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "40c4ae07d79f89c8f4e35b11066e059d289da043e70a37b5e4a87b0a06f26d07" "6b1b3ef12a4a429f9d2eae2019115b0a7583563e17525f0a4e9696433f2f3c16" "b0ccdbe8d324c6d14240ef8dad9e547c7fc7cd11450eac9e6807dbce0430f3c0" "f0d90d902dbee341e375b3b5b58e3cb4c26a657894feb5eb7ff7535b1a8ce9d4" "fb7e7b68fe6e72c52bd356cb8a399771605432f31ed7d38215adf38c6da045f8" "75c9f0b0499ecdd0c856939a5de052742d85af81814e84faa666522c2bba7e85" "8b231ba3e5f61c2bb1bc3a2d84cbd16ea17ca13395653566d4dfbb11feaf8567" "93e458ab36b4d904c2e485944d0e1b4d4ad879d83bb6ca5c19a9dac7f6549ee5" "fa4e4895e851ffbb9ac68c2f26a863ba054a96e4f3be4cb1f03db9a0cf46fb69" default)))
+ '(fci-rule-color "#383838")
+ '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+ '(highlight-symbol-colors (--map (solarized-color-blend it "#fdf6e3" 0.25) (quote ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+ '(highlight-symbol-foreground-color "#586e75")
+ '(highlight-tail-colors (quote (("#eee8d5" . 0) ("#B4C342" . 20) ("#69CABF" . 30) ("#69B7F0" . 50) ("#DEB542" . 60) ("#F2804F" . 70) ("#F771AC" . 85) ("#eee8d5" . 100))))
+ '(magit-diff-use-overlays nil)
+ '(rainbow-identifiers-cie-l*a*b*-lightness 35)
+ '(rainbow-identifiers-cie-l*a*b*-saturation 40)
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
+ '(term-default-bg-color "#fdf6e3")
+ '(term-default-fg-color "#657b83")
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map (quote ((20 . "#dc322f") (40 . "#c85d17") (60 . "#be730b") (80 . "#b58900") (100 . "#a58e00") (120 . "#9d9100") (140 . "#959300") (160 . "#8d9600") (180 . "#859900") (200 . "#669b32") (220 . "#579d4c") (240 . "#489e65") (260 . "#399f7e") (280 . "#2aa198") (300 . "#2898af") (320 . "#2793ba") (340 . "#268fc6") (360 . "#268bd2"))))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list (quote (unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -52,6 +52,8 @@ fi
 #composition manager
 compton --config ~/.i3/compton.conf &
 
+feh --bg-scale ~/pictures/goodwallpaper.jpg
+
 i3
 
 #getting rid of gpg agent

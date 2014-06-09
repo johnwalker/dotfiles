@@ -774,13 +774,13 @@ Skip project and sub-project tasks, habits, and loose non-project tasks."
             (or subtree-end (point-max)))
         next-headline))))
 
-(setq org-alphabetical-lists t)
+;; (setq org-alphabetical-lists t)
 
 ;; Explicitly load required exporters
 (require 'ox-html)
 (require 'ox-latex)
 (require 'ox-ascii)
-
+(require 'babel)
 (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
 
 ; Make babel results blocks lowercase
@@ -1362,7 +1362,7 @@ Late deadlines first, then scheduled, then non-late deadlines"
     (add-to-list 'load-path org-mode-user-contrib-lisp-path)
   (add-to-list 'load-path (expand-file-name "~/git/org-mode/contrib/lisp")))
 
-(require 'org-checklist)
+;; (require 'org-checklist)
 
 (setq org-enforce-todo-dependencies t)
 
@@ -1592,7 +1592,7 @@ Late deadlines first, then scheduled, then non-late deadlines"
 (global-set-key (kbd "<C-f6>") '(lambda () (interactive) (bookmark-set "SAVED")))
 (global-set-key (kbd "<f6>") '(lambda () (interactive) (bookmark-jump "SAVED")))
 
-(require 'org-mime)
+;; (require 'org-mime)
 
 (setq org-agenda-skip-additional-timestamps-same-entry t)
 
