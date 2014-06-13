@@ -6,7 +6,8 @@
 (setq package-archives '(;; ("elpa" . "http://tromey.com/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "http://melpa.milkbox.net/packages/")
-			 ("org" . "http://orgmode.org/elpa/")))
+			 ;; ("org" . "http://orgmode.org/elpa/")
+			 ))
 (setq next-line-add-newlines t)
 (setq package-list '(ac-nrepl
 		     ag
@@ -254,7 +255,7 @@
  ("C-c n" . indent-buffer)
  ("C-x m" . magit-status)	   
  ("C-." . delete-other-windows)
- ("C-t" . other-window)
+ ("M-o" . other-window)
  ("C-]" . ibuffer)
  ("C-x k" . kill-this-buffer))
 
@@ -388,6 +389,23 @@
   (progn
     (yas/load-directory "~/.emacs.d/snippets")))
 
+(require 'geiser)
+(require 'quack)
+(setq geiser-active-implementations '(racket))
+
+(defun push-mark-no-activate ()
+  (interactive)
+  (push-mark (point) t nil)
+  (message "Pushed mark to ring"))
+
+(global-set-key (kbd "C-+") 'push-mark-no-activate)
+
+(defun jump-to-mark ()
+  (interactive)
+  (set-mark-command 1))
+
+(global-set-key (kbd "M-+") 'jump-to-mark)
+
 (provide 'init)
 
 (custom-set-variables
@@ -401,13 +419,14 @@
  '(cua-normal-cursor-color "#657b83")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
- '(custom-safe-themes (quote ("bf648fd77561aae6722f3d53965a9eb29b08658ed045207fe32ffed90433eb52" "ce79400f46bd76bebeba655465f9eadf60c477bd671cbcd091fe871d58002a88" "d5336b707d375fbc2c00a53a60cafa264fc7e600fd747cce2dde976609b37573" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "40c4ae07d79f89c8f4e35b11066e059d289da043e70a37b5e4a87b0a06f26d07" "6b1b3ef12a4a429f9d2eae2019115b0a7583563e17525f0a4e9696433f2f3c16" "b0ccdbe8d324c6d14240ef8dad9e547c7fc7cd11450eac9e6807dbce0430f3c0" "f0d90d902dbee341e375b3b5b58e3cb4c26a657894feb5eb7ff7535b1a8ce9d4" "fb7e7b68fe6e72c52bd356cb8a399771605432f31ed7d38215adf38c6da045f8" "75c9f0b0499ecdd0c856939a5de052742d85af81814e84faa666522c2bba7e85" "8b231ba3e5f61c2bb1bc3a2d84cbd16ea17ca13395653566d4dfbb11feaf8567" "93e458ab36b4d904c2e485944d0e1b4d4ad879d83bb6ca5c19a9dac7f6549ee5" "fa4e4895e851ffbb9ac68c2f26a863ba054a96e4f3be4cb1f03db9a0cf46fb69" default)))
+ '(custom-safe-themes (quote ("032fe1f3acb2dcca1d451b891e1275a7d51f62c355e7883a8342e5734153a072" "7a9f392481b6e2fb027ab9d8053ab36c0f23bf5cc1271206982339370d894c74" "33c5a452a4095f7e4f6746b66f322ef6da0e770b76c0ed98a438e76c497040bb" "65ae93029a583d69a3781b26044601e85e2d32be8f525988e196ba2cb644ce6a" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "bf648fd77561aae6722f3d53965a9eb29b08658ed045207fe32ffed90433eb52" "ce79400f46bd76bebeba655465f9eadf60c477bd671cbcd091fe871d58002a88" "d5336b707d375fbc2c00a53a60cafa264fc7e600fd747cce2dde976609b37573" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "40c4ae07d79f89c8f4e35b11066e059d289da043e70a37b5e4a87b0a06f26d07" "6b1b3ef12a4a429f9d2eae2019115b0a7583563e17525f0a4e9696433f2f3c16" "b0ccdbe8d324c6d14240ef8dad9e547c7fc7cd11450eac9e6807dbce0430f3c0" "f0d90d902dbee341e375b3b5b58e3cb4c26a657894feb5eb7ff7535b1a8ce9d4" "fb7e7b68fe6e72c52bd356cb8a399771605432f31ed7d38215adf38c6da045f8" "75c9f0b0499ecdd0c856939a5de052742d85af81814e84faa666522c2bba7e85" "8b231ba3e5f61c2bb1bc3a2d84cbd16ea17ca13395653566d4dfbb11feaf8567" "93e458ab36b4d904c2e485944d0e1b4d4ad879d83bb6ca5c19a9dac7f6549ee5" "fa4e4895e851ffbb9ac68c2f26a863ba054a96e4f3be4cb1f03db9a0cf46fb69" default)))
  '(fci-rule-color "#383838")
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors (--map (solarized-color-blend it "#fdf6e3" 0.25) (quote ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
  '(highlight-symbol-foreground-color "#586e75")
  '(highlight-tail-colors (quote (("#eee8d5" . 0) ("#B4C342" . 20) ("#69CABF" . 30) ("#69B7F0" . 50) ("#DEB542" . 60) ("#F2804F" . 70) ("#F771AC" . 85) ("#eee8d5" . 100))))
  '(magit-diff-use-overlays nil)
+ '(magit-use-overlays nil)
  '(rainbow-identifiers-cie-l*a*b*-lightness 35)
  '(rainbow-identifiers-cie-l*a*b*-saturation 40)
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
