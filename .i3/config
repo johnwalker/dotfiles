@@ -1,9 +1,9 @@
 set $mod Mod5
 
-font xft:Bitstream 9
+font xft:Inconsolata 8 
 
 new_window pixel 2
-focus_follows_mouse  no
+focus_follows_mouse no
 
 #don't move to neighbouring screen with hjkl
 force_focus_wrapping yes
@@ -26,9 +26,7 @@ bindsym $mod+Return exec urxvtc
 bindsym $mod+c kill
 
 # start dmenu (a program launcher)
-bindsym $mod+r exec "dmenu_run -nb black -p run"
-
-bindsym $mod+Shift+r exec "~/.bin/pass-autotype-dmenu"
+bindsym $mod+r exec "dmenu_run -nf '#888888' -nb '#222222' -sf '#ffffff' -sb '#285577'"
 
 # screen lock
 bindsym Control+$mod+l exec slimlock
@@ -62,9 +60,6 @@ bindsym $mod+m layout toggle split
 bindsym $mod+d focus parent
 bindsym $mod+b focus child
 
-# move container between displays
-bindsym $mod+semicolon move workspace to output right
-
 # toggle tiling / floating
 bindsym $mod+Shift+f floating toggle
 
@@ -72,7 +67,7 @@ bindsym $mod+Shift+f floating toggle
 bindsym $mod+space focus mode_toggle
 
 # switch to last workspace
-bindsym $mod+6 workspace back_and_forth
+bindsym $mod+l workspace back_and_forth
 
 # switch to workspace
 bindsym $mod+a workspace 1: a
@@ -95,6 +90,7 @@ bindsym $mod+Shift+n move container to workspace 7: fe
 bindsym $mod+Shift+s move container to workspace 8: ff
 
 bindsym $mod+z reload
+bindsym $mod+i exec "xcalib -invert -alter"
 bindsym $mod+Shift+x restart
 bindsym $mod+Shift+z exit
 
@@ -118,11 +114,6 @@ bindsym XF86AudioRaiseVolume exec "amixer -D pulse sset Master '3%+'"
 bindsym XF86AudioLowerVolume exec "amixer -D pulse sset Master '1%-'"
 bindsym XF86AudioMute exec "amixer -D pulse set Master toggle"
 bindsym XF86AudioMicMute exec "amixer -D pulse sset Capture toggle"
-
-bindsym XF86AudioPlay exec "~/.bin/player toggle"
-bindsym XF86AudioStop exec "~/.bin/player stop"
-bindsym XF86AudioNext exec "~/.bin/player next"
-bindsym XF86AudioPrev exec "~/.bin/player previous"
 
 bindsym XF86KbdBrightnessDown exec "sudo /opt/kbdlight/bin/kbdlight -"
 bindsym XF86KbdBrightnessUp exec "sudo /opt/kbdlight/bin/kbdlight +"

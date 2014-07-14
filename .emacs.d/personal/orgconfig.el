@@ -1,13 +1,13 @@
-;; (add-to-list 'load-path "~/development/org-mode/lisp")
-;; (add-to-list 'load-path "~/development/org-mode/contrib/lisp" t)
-
 (require 'ox-publish)
 (require 'htmlize)
 (setq org-html-htmlize-output-type 'inline-css)
 (setq org-html-validation-link nil)
 
 (setq org-publish-project-alist
-      '(("blog" :components ("orgblog" "images" "feed-clojure" "feed-blog" "other" "js"))
+      '(("blog" :components ("orgblog" "images"
+			     "feed-clojure" "feed-blog" "other"
+			     "js"
+			     ))
 	("orgblog"
 	 :auto-sitemap nil
 	 :author "John Walker"
@@ -21,29 +21,29 @@
 	 :sitemap-sort-files anti-chronologically
 	 :publishing-directory "~/documents/blog"
 	 :publishing-function my-org-publish-org-to-html
+	 :with-drawers t
+	 :with-special-strings t
+	 ;; :publishing-function my-org-publish-org-to-html
 	 :exclude "~/documents/blorg/css feed.org feed-clojure.org" 
 	 :recursive t
 	 :headline-levels 5 
-	 :html-preamble
-	 " <a href=\"#skip\" class=\"offscreen\">Skip Content</a> 
-<div class=\"heading\">
-      <nav>
-        <ul>
-          <li><a class=\"loc\" href=\"/\">johnwalker.github.io</a></li>
-          <li><a class=\"loc\" href=\"https://github.com/johnwalker\">github</a></li>
-          <li><a class=\"loc\" href=\"https://twitter.com/johnwalker301\">twitter</a></li>
-        </ul>
-      </nav>
-</div>"
+;; 	 :html-preamble
+;; 	 " 
+;;       <nav>
+;;           <a class=\"loc\" href=\"/\">johnwalker.github.io</a>
+;;           <a class=\"loc\" href=\"https://github.com/johnwalker\">github</a>
+;;           <a class=\"loc\" href=\"https://twitter.com/johnwalker301\">twitter</a>
+;;       </nav>
+;; </div>"
 	 :section-numbers nil
-	 :html-head-include-default-style nil
-	 :description "Thoughts on Software development, Natural Language Processing and Networks."
+	 :html-head-include-default-style t
+	 :description "A dude blogs"
 	 :html-head-include-scripts nil
-	 :html-head-extra
-	 "
-<link rel=\"alternate\" type=\"application/rss+xml\"
-                href=\"http://johnwalker.github.io\"
-                title=\"RSS feed for johnwalker.github.io\">"
+;; 	 :html-head-extra
+;; 	 "
+;; <link rel=\"alternate\" type=\"application/rss+xml\"
+;;                 href=\"http://johnwalker.github.io\"
+;;                 title=\"RSS feed for johnwalker.github.io\">"
 	 :with-toc nil)
 	("feed-clojure"
 	 :base-directory "~/documents/blorg"	 
@@ -91,7 +91,12 @@
 	 :publishing-function org-publish-attachment)))
 
 (defun my-org-html-postamble (plist)
-  (format "<p class=\"postamble\">Last update : %s </p>" (format-time-string "%d %b %Y")))
+  ;; (concat (format "<p class=\"postamble\">Last update : %s </p>" (format-time-string "%Y %B %d"))
+;;         "
+;; <footer>
+
+;; </footer>")
+  )
 
 (setq org-html-postamble 'my-org-html-postamble)
 
@@ -139,7 +144,7 @@ holding export options."
    (format "<%s id=\"%s\">\n"
 	   (nth 1 (assq 'content org-html-divs))
 	   (nth 2 (assq 'content org-html-divs)))
-   "<a href=\"#skip\" class=\"offscreen\">Skip Content</a> "
+   ;; "<a href=\"#skip\" class=\"offscreen\">Skip Content</a> "
    contents
    (format "</%s>\n"
 	   (nth 1 (assq 'content org-html-divs)))
@@ -162,33 +167,29 @@ holding export options."
 (use-package ox-rss)
 (setq org-export-htmlize-output-type 'css)
 
-  ;; fontify code in code blocks
+;; fontify code in code blocks
 (setq org-src-fontify-natively t)
+(require 'babel)
+(setq org-ditaa-jar-path "~/toolbox/ditaa0_9.jar")
+(setq org-plantuml-jar-path "~/toolbox/plantuml.jar")
+(setq org-babel-results-keyword "results")
+(setq org-export-latex-listings t)            
 
-(use-package babel
-  :ensure babel
-  :config (progn
-	    (setq org-ditaa-jar-path "~/toolbox/ditaa0_9.jar")
-	    (setq org-plantuml-jar-path "~/toolbox/plantuml.jar")
-	    (setq org-babel-results-keyword "results")
-	    (setq org-export-latex-listings t)            
-	    
-	    (org-babel-do-load-languages
-	     (quote org-babel-load-languages)
-	     (quote ((emacs-lisp . t)
-		     ;; (dot . t)		
-		     (ditaa . t)
-		     (java . t)
-		     (gnuplot . t)
-		     (lisp . t)
-		     (clojure . t)
-		     (sh . t)
-		     (org . t))))
-	    (setq org-confirm-babel-evaluate nil)
-	    (setq org-export-babel-evaluate nil)
-	    (add-to-list 'org-src-lang-modes (quote ("plantuml" . fundamental)))
-	    (setq org-src-fontify-natively t)))
-
+(org-babel-do-load-languages
+ (quote org-babel-load-languages)
+ (quote ((emacs-lisp . t)
+	 (dot . t)		
+	 (ditaa . t)
+	 (java . t)
+	 (gnuplot . t)
+	 (lisp . t)
+	 (clojure . t)
+	 (sh . t)
+	 (org . t))))
+(setq org-confirm-babel-evaluate nil)
+(setq org-export-babel-evaluate nil)
+(add-to-list 'org-src-lang-modes (quote ("plantuml" . fundamental)))
+(setq org-src-tab-acts-natively t)
 
 (add-to-list 'org-latex-packages-alist '("" "minted"))
 (setq org-latex-listings 'minted)
@@ -213,103 +214,40 @@ holding export options."
 		    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 		    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
 
-(global-set-key (kbd "C-c c") 'org-capture)
-(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "M-<f2>") 'org-agenda)
 
 (setq org-capture-templates
       (quote (("t" "todo" entry (file "~/git/org/refile.org")
                "* TODO %?\n%U\n%a\n" :clock-in t :clock-resume t)
-              ("r" "respond" entry (file "~/git/org/refile.org")
-               "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-              ("n" "note" entry (file "~/git/org/refile.org")
+	      ("n" "note" entry (file "~/git/org/refile.org")
                "* %? :NOTE:\n%U\n%a\n" :clock-in t :clock-resume t)
-              ("j" "Journal" entry (file+datetree "~/git/org/diary.org")
+              ("j" "journal" entry (file+datetree "~/git/org/diary.org.gpg")
                "* %?\n%U\n" :clock-in t :clock-resume t)
               ("w" "org-protocol" entry (file "~/git/org/refile.org")
                "* TODO Review %c\n%U\n" :immediate-finish t)
-              ("m" "Meeting" entry (file "~/git/org/refile.org")
-               "* MEETING with %? :MEETING:\n%U" :clock-in t :clock-resume t)
-              ("p" "Phone call" entry (file "~/git/org/refile.org")
-               "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
-              ("h" "Habit" entry (file "~/git/org/refile.org")
-               "* NEXT %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+	      ("h" "habit" entry (file "~/git/org/refile.org")
+               "* TODO %?\n%U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: TODO\n:END:\n"))))
 
 (if (boundp 'org-user-agenda-files)
     (setq org-agenda-files org-user-agenda-files)
-  (setq org-agenda-files (quote ("~/git/org"
-				 ))))
+  (setq org-agenda-files (quote ("~/git/org"))))
 
 (setq org-agenda-compact-blocks t)
 
 (setq org-agenda-custom-commands
-      (quote (("N" "Notes" tags "NOTE"
-               ((org-agenda-overriding-header "Notes")
-                (org-tags-match-list-sublevels t)))
-              ("h" "Habits" tags-todo "STYLE=\"habit\""
-               ((org-agenda-overriding-header "Habits")
-                (org-agenda-sorting-strategy
-                 '(todo-state-down effort-up category-keep))))
-              (" " "Agenda"
-               ((agenda "" nil)
-                (tags "REFILE"
-                      ((org-agenda-overriding-header "Tasks to Refile")
-                       (org-tags-match-list-sublevels nil)))
-                (tags-todo "-CANCELLED/!"
-                           ((org-agenda-overriding-header "Stuck Projects")
-                            (org-agenda-skip-function 'bh/skip-non-stuck-projects)
-                            (org-agenda-sorting-strategy
-                             '(category-keep))))
-                (tags-todo "-HOLD-CANCELLED/!"
-                           ((org-agenda-overriding-header "Projects")
-                            (org-agenda-skip-function 'bh/skip-non-projects)
-                            (org-tags-match-list-sublevels 'indented)
-                            (org-agenda-sorting-strategy
-                             '(category-keep))))
-                (tags-todo "-CANCELLED/!NEXT"
-                           ((org-agenda-overriding-header (concat "Project Next Tasks"
-                                                                  (if bh/hide-scheduled-and-waiting-next-tasks
-                                                                      ""
-                                                                    " (including WAITING and SCHEDULED tasks)")))
-                            (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
-                            (org-tags-match-list-sublevels t)
-                            (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-sorting-strategy
-                             '(todo-state-down effort-up category-keep))))
-                (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
-                           ((org-agenda-overriding-header (concat "Project Subtasks"
-                                                                  (if bh/hide-scheduled-and-waiting-next-tasks
-                                                                      ""
-                                                                    " (including WAITING and SCHEDULED tasks)")))
-                            (org-agenda-skip-function 'bh/skip-non-project-tasks)
-                            (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-sorting-strategy
-                             '(category-keep))))
-                (tags-todo "-REFILE-CANCELLED-WAITING-HOLD/!"
-                           ((org-agenda-overriding-header (concat "Standalone Tasks"
-                                                                  (if bh/hide-scheduled-and-waiting-next-tasks
-                                                                      ""
-                                                                    " (including WAITING and SCHEDULED tasks)")))
-                            (org-agenda-skip-function 'bh/skip-project-tasks)
-                            (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-                            (org-agenda-sorting-strategy
-                             '(category-keep))))
-                (tags-todo "-CANCELLED+WAITING|HOLD/!"
-                           ((org-agenda-overriding-header "Waiting and Postponed Tasks")
-                            (org-agenda-skip-function 'bh/skip-stuck-projects)
-                            (org-tags-match-list-sublevels nil)
-                            (org-agenda-todo-ignore-scheduled t)
-                            (org-agenda-todo-ignore-deadlines t)))
-                (tags "-REFILE/"
-                      ((org-agenda-overriding-header "Tasks to Archive")
-                       (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
-                       (org-tags-match-list-sublevels nil))))
-               nil))))
+      '(("n" "notes" tags "NOTE"
+	 ((org-agenda-overriding-header "notes")
+	  (org-tags-match-list-sublevels t)))
+	("h" "habits" tags-todo "STYLE=\"habit\""
+	 ((org-agenda-overriding-header "habits")
+	  (org-agenda-sorting-strategy
+	   '(todo-state-down effort-up category-keep))))
+	(" " "agenda"
+	 ((agenda "" nil)
+	  (tags "REFILE"
+		((org-agenda-overriding-header "Tasks to Refile")
+		 (org-tags-match-list-sublevels nil))))
+	 nil)))
 
 (org-clock-persistence-insinuate)
 (setq org-clock-history-length 23)
@@ -319,21 +257,21 @@ holding export options."
 (setq org-clock-out-when-done t)
 (setq org-clock-persist t)
 (setq org-clock-persist-query-resume nil)
-(setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+(setq org-clock-auto-clock-resolution 'when-no-clock-is-running)
 (setq org-clock-report-include-clocking-task t)
 
-(setq org-time-stamp-rounding-minutes (quote (1 1)))
+(setq org-time-stamp-rounding-minutes '(1 1))
 
 (setq org-agenda-clock-consistency-checks
       (quote (:max-duration "4:00"
-              :min-duration 0
-              :max-gap 0
-              :gap-ok-around ("4:00"))))
+			    :min-duration 0
+			    :max-gap 0
+			    :gap-ok-around ("4:00"))))
 
-(setq org-global-properties (quote (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
-                                    ("STYLE_ALL" . "habit"))))
+(setq org-global-properties  '(("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
+			       ("STYLE_ALL" . "habit")))
 
-(setq org-agenda-log-mode-items (quote (closed state)))
+(setq org-agenda-log-mode-items '(closed state))
 
 (setq org-agenda-clockreport-parameter-plist
       (quote (:link t :maxlevel 5 :fileskip0 t :compact t :narrow 80)))
@@ -384,7 +322,7 @@ as the default task."
     ;;
     (save-restriction
       (widen)
-      ; Find the tags on the current task
+      ;; Find the tags on the current task
       (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)) (eq arg 4))
           (org-clock-in '(16))
         (bh/clock-in-organization-task-as-default)))))
@@ -457,8 +395,23 @@ A prefix arg forces clock in of the default task."
 (add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
 
 (setq org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
+(bind-keys :map org-mode-map
+	   ("C-<f3>" . bh/punch-in)
+	   ("M-<f3>". bh/punch-out))
 
-(global-set-key (kbd "<f9> I") 'bh/punch-in)
-(global-set-key (kbd "<f9> O") 'bh/punch-out)
+(add-hook 'org-mode-hook '(lambda ()
+                            ;; turn on flyspell-mode by default
+                            (flyspell-mode 1)
+                            ;; C-TAB for expanding
+                            (local-set-key (kbd "C-<tab>")
+                                           'yas/expand-from-trigger-key)
+                            ;; keybinding for editing source code blocks
+                            (local-set-key (kbd "C-c s e")
+                                           'org-edit-src-code)
+                            ;; keybinding for inserting code blocks
+                            (local-set-key (kbd "C-c s i")
+                                           'org-insert-src-block)
+                            ))
+
 
 (provide 'orgconfig)
