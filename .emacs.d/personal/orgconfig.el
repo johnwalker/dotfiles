@@ -164,7 +164,7 @@ holding export options."
 
 (setq org-babel-clojure-backend 'cider)
 
-(use-package ox-rss)
+;; (use-package ox-rss)
 (setq org-export-htmlize-output-type 'css)
 
 ;; fontify code in code blocks
@@ -194,25 +194,25 @@ holding export options."
 (add-to-list 'org-latex-packages-alist '("" "minted"))
 (setq org-latex-listings 'minted)
 
-(require 'tex)
-(use-package ox-latex
-  :defer t
-  :config (progn
-	    (setq latex-run-command "pdflatex")
-	    (TeX-global-PDF-mode t)
-	    (setq TeX-PDF-mode t)
-	    (setq TeX-auto-save t)
-	    (setq TeX-parse-self t)
-	    (setq-default TeX-master nil)
-	    (add-hook 'LaTeX-mode-hook 'visual-line-mode)
-	    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-	    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-	    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-	    (setq reftex-plug-into-AUCTeX t)
-	    (setq org-latex-pdf-process
-		  '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-		    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-		    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
+;; (require 'tex)
+;; (use-package ox-latex
+;;   :defer t
+;;   :config (progn
+;; 	    (setq latex-run-command "pdflatex")
+;; 	    (TeX-global-PDF-mode t)
+;; 	    (setq TeX-PDF-mode t)
+;; 	    (setq TeX-auto-save t)
+;; 	    (setq TeX-parse-self t)
+;; 	    (setq-default TeX-master nil)
+;; 	    (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+;; 	    (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+;; 	    (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+;; 	    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+;; 	    (setq reftex-plug-into-AUCTeX t)
+;; 	    (setq org-latex-pdf-process
+;; 		  '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;; 		    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+;; 		    "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))))
 
 (global-set-key (kbd "M-<f2>") 'org-agenda)
 
@@ -401,7 +401,7 @@ A prefix arg forces clock in of the default task."
 
 (add-hook 'org-mode-hook '(lambda ()
                             ;; turn on flyspell-mode by default
-                            (flyspell-mode 1)
+                            ;; (flyspell-mode 1)
                             ;; C-TAB for expanding
                             (local-set-key (kbd "C-<tab>")
                                            'yas/expand-from-trigger-key)
@@ -412,6 +412,7 @@ A prefix arg forces clock in of the default task."
                             (local-set-key (kbd "C-c s i")
                                            'org-insert-src-block)
                             ))
+
 
 
 (provide 'orgconfig)
