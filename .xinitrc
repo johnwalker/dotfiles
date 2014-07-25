@@ -14,7 +14,6 @@ unclutter -root -visible &
 eval `dbus-launch --sh-syntax --exit-with-session`
 
 #apps
-start-pulseaudio-x11
 urxvtd &
 
 #keyboard layout
@@ -43,6 +42,8 @@ compton --config ~/.i3/compton.conf &
 
 # color temperature adjustment, set for Lexington
 # redshift -l 38.0297:-84.4947 
+
+# start-pulseaudio-x11 &
 
 i3
 

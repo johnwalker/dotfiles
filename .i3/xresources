@@ -1,18 +1,6 @@
 ! vim: set filetype=xdefaults :
 
-URxvt.perl-ext-common : default,keyboard-select,url-select,clipboard
-
-URxvt.keysym.M-x           : perl:keyboard-select:activate
-URxvt.keysym.M-u           : perl:url-select:select_next
-URxvt.keysym.M-c           : perl:clipboard:copy
-URxvt.keysym.M-v           : perl:clipboard:paste
-URxvt.keysym.M-s           : perl:keyboard-select:search
-URxvt.keysym.M-C-v         : perl:clipboard:paste_escaped
-URxvt.url-select.launcher  : firefox
-URxvt.url-select.autocopy  : true
-URxvt.url-select.underline : true
-
-URxvt.font        : xft:Inconsolata:pixelsize=13
+URxvt.font        : xft:BitstreamVeraSansMono:pixelsize=13
 URxvt.letterSpace : -1
 URxvt.termName    : rxvt-256color
 URxvt.iso14755    : false
@@ -54,8 +42,8 @@ URxvt.color1  : #DC322F
 URxvt.color9  : #E84F4F
 
 ! green
-URxvt.color2  : #27ae60
-URxvt.color10 : #2ecc71
+! URxvt.color2  : #27ae60
+! URxvt.color10 : #2ecc71
 
 ! yellow
 URxvt.color3  : #f39c12
@@ -76,3 +64,6 @@ URxvt.color14 : #93A1A1
 ! white
 URxvt.color7  : #EEE8D5
 URxvt.color15 : #FDF6E3
+
+URxvt.transparent:   true
+URxvt.shading:       20
