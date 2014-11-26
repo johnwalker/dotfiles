@@ -1,0 +1,40 @@
+;; (load-theme 'solarized-light t)
+;; (load-theme 'bliss t)
+(setq x-select-enable-clipboard t)
+(setq-default line-spacing 3)
+
+(add-hook 'haskell-mode-hook 'linum-mode)
+(add-hook 'clojure-mode-hook 'linum-mode)
+(add-hook 'emacs-lisp-mode-hook 'linum-mode)
+
+(blink-cursor-mode 0)
+
+(fset 'yes-or-no-p 'y-or-n-p)
+(menu-bar-mode -1)
+(horizontal-scroll-bar-mode -1)
+(scroll-bar-mode -1)
+(set-default 'truncate-lines t)
+(setq echo-keystrokes 0.005)
+(setq frame-title-format '("%f - " user-real-login-name "@" system-name))
+(setq initial-scratch-message "")
+(setq inhibit-startup-screen t)
+(scroll-bar-mode 0)
+(global-auto-revert-mode 1)
+(setq show-paren-delay 0)
+(setq truncate-partial-width-windows t)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(setq show-help-function nil)
+(which-function-mode t)
+(setq default-frame-alist '((vertical-scroll-bars . 0)
+			    (menu-bar-lines . 0)
+			    (tool-bar-lines . 0)))
+
+(set-default-font "Inconsolata:size=16:antialias=true")
+
+(mouse-avoidance-mode 'cat-and-mouse)
+(setq mouse-wheel-scroll-amount '(0.01)
+      mouse-wheel-progressive-speed nil
+      mouse-wheel-follow-mouse 't)
+
+(provide 'cfg-ui)

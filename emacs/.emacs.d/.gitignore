@@ -1,0 +1,6 @@
+auto-save-list
+.cask
+elpa
+eshell
+org-clock-save.el
+tramp
